@@ -34,7 +34,7 @@ class PytorchMultiClass(nn.Module):
         return self.softmax(x)
 
 nn_model = PytorchMultiClass(4)
-nn_model.load_state_dict(torch.load('../models/pt_base_state_dict'))
+nn_model.load_state_dict(torch.load('../models/pt_hpt_state_dict'))
 
 def format_features(review_aroma:int, review_appearance:int, review_palate:int, review_taste:int):
   return {
