@@ -56,7 +56,7 @@ def format_features(review_aroma:int, review_appearance:int, review_palate:int, 
 
 @app.get("/")
 def read_root():
-    return 'Project Objectives: put something here'
+    return 'Project Objectives: This is the beer type prediction API. This API use the neural network model to predict beer type based on review scores. Please go to https://secret-sands-74221.herokuapp.com/docs to find out more'
 
 @app.get("/health", status_code=200)
 def healthcheck():
