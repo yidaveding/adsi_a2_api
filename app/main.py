@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from starlette.responses import JSONResponse
+from fastapi.responses import HTMLResponse
 import joblib
 import torch
 import torch.nn as nn
@@ -54,15 +55,37 @@ def format_features(review_aroma:int, review_appearance:int, review_palate:int, 
         'review_taste': [review_taste]
     }
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def read_root():
-    return 'Project Objectives: This is the beer type prediction API. This API use the neural network model to predict beer type based on review scores. Please go to https://secret-sands-74221.herokuapp.com/docs to find out more'
+    return \
+        """
+        <!DOCTYPE html>
+        <html>
+            <body>
+            
+            <h1>Beer Style Prediction API</h1>
+            <h3>For the Beer Lovers!</h3>
+            
+            <p>What's special about me?</p>
+            
+            <p>I'm the beer style API, do you want to test my beer knowledge? I'm a neural network model trained with an impressive 1.5M different beer products. You can say that I know my beers!</p> 
+                                    
+            <p>You can go to the <a href=https://secret-sands-74221.herokuapp.com/docs>documentation page</a> to checkout the how to talk to me.'</p>
+            
+            <p>Talk Soon</p>
+            
+            <h3>UDG - UTS Datazon Group</h3>
+
+            
+            </body>
+        </html>
+        """
 
 @app.get("/health", status_code=200)
 def healthcheck():
     return 'Welcome to predictor API, \n the endpoint is ready'
 
-@app.post("/rf/beer/type")
+@app.post("/beer/type")
 def predict_beer(brewery_name:str, review_aroma:float, review_appearance:float, review_palate:float, review_taste:float):
     features = format_features(review_aroma, review_appearance, review_palate, review_taste)
     obs = sc.transform(pd.DataFrame(features))
@@ -72,7 +95,7 @@ def predict_beer(brewery_name:str, review_aroma:float, review_appearance:float, 
     pred = enc.inverse_transform(pred)
     return JSONResponse(pred.tolist())
 
-@app.post("/rf/beers/type")
+@app.post("/beers/type")
 def predict_beers(beer_dict):
     y_pred_list = []
     beer_dict = json.loads(beer_dict)
